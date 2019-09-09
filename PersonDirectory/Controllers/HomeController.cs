@@ -179,7 +179,7 @@ namespace PersonDirectory.Controllers
                 person.Photo = FileHandler.SaveFile(image);
                 unitOfWork.PersonRepository.Insert(person);
                 unitOfWork.Save();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = person.ID });
             }
 
             ViewBag.CityID = new SelectList(unitOfWork.CityRepository.Get(), "ID", "Name");
