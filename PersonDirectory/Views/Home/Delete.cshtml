@@ -1,0 +1,78 @@
+﻿@model PersonDirectory.DataAccess.Person
+
+@{
+    ViewBag.Title = "წაშლა";
+}
+
+<h2>წაშლა</h2>
+
+<h3>ნამდვილად გსურთ ამ პიროვნების წაშლა?</h3>
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            ID
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ID)
+        </dd>
+        <dt>
+            სახელი
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            გვარი
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            პირადი ნომერი
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PersonalNr)
+        </dd>
+
+        <dt>
+            დაბადების თარიღი
+        </dt>
+
+        <dd>
+            @Model.BirthDate.ToString("yyyy-MM-dd")
+        </dd>
+
+        <dt>
+            ქალაქი
+
+        <dd>
+            @Html.DisplayFor(model => model.City.Name)
+        </dd>
+
+        <dt>
+            სქესი
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gender.GenderName)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="წაშლა" class="btn btn-danger" /> |
+            @Html.ActionLink("სიაში დაბრუნება", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

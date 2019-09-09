@@ -1,0 +1,146 @@
+﻿@model PersonDirectory.DataAccess.Person
+
+@{
+    ViewBag.Title = "დეტალური ინფორმაცია";
+}
+
+    <h2>პიროვნების დეტალები</h2>
+
+<div>
+
+    <hr />
+    <div class="row">
+        <div class="col-lg-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    ID
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.ID)
+                </dd>
+                <dt>
+                    სახელი
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.FirstName)
+                </dd>
+
+                <dt>
+                   გვარი
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.LastName)
+                </dd>
+
+                <dt>
+                  პირადი ნომერი
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.PersonalNr)
+                </dd>
+
+                <dt>
+                   დაბადების თარიღი
+                </dt>
+
+                <dd>
+                    @Model.BirthDate.ToString("yyyy-MM-dd")
+                </dd>
+
+    
+
+                <dt>
+                  ქალაქი
+
+                <dd>
+                    @Html.DisplayFor(model => model.City.Name)
+                </dd>
+
+                <dt>
+                   სქესი
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Gender.GenderName)
+                </dd>
+
+            </dl>
+        </div>
+        <div class="col-lg-4">
+            <div class="col-lg-12">
+                <h4>
+                    ტელეფონის ნომრები
+                </h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                ნომერი
+                            </th>
+                            <th>
+                                ტიპი
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var phone in Model.Phones)
+                        {
+                            <tr>
+                                <td>
+                                    @phone.Number
+                                </td>
+                                <td>
+                                    @phone.PhoneType.Type
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-12">
+                <h4>
+                    დაკავშირებული პირები
+                </h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                სახელი და გვარი
+                            </th>
+                            <th>
+                                კავშირის ტიპი
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var connection in Model.PersonConnections)
+                        {
+                            <tr>
+                                <td>
+                                    @connection.Person1.FirstName @connection.Person1.LastName
+                                </td>
+                                <td>
+                                    @connection.ConnectionType.Type
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            @if (!String.IsNullOrEmpty(Model.Photo))
+            {
+                <img src="@Url.Content(Model.Photo)" class="img-responsive" />
+            }
+        </div>
+    </div>
+   
+</div>
+<p>
+    @Html.ActionLink("რედაქტირება", "Edit", new { id = Model.ID }, new { @class="btn btn-warning"}) |
+    @Html.ActionLink("სიაში დაბრუნება", "Index", null, new { @class="btn btn-default"})
+</p>

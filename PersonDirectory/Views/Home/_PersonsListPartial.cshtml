@@ -1,0 +1,62 @@
+﻿@model PagedList.IPagedList<PersonDirectory.DataAccess.Person>
+<table class="table table-striped">
+    <tr>
+        <th>
+            ID
+        </th>
+        <th>
+            სახელი
+        </th>
+        <th>
+            გვარი
+        </th>
+        <th>
+            პირადი ნომერი
+        </th>
+        <th>
+            დაბადების თარიღი
+        </th>
+
+        <th>
+            ქალაქი
+        </th>
+        <th>
+            სქესი
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PersonalNr)
+            </td>
+            <td>
+                @item.BirthDate.ToString("yyyy-MM-dd")
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.City.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender.GenderName)
+            </td>
+            <td>
+                @Html.ActionLink("რედაქტირება", "Edit", new { id = item.ID }, new { @class="btn btn-warning"}) 
+                @Html.ActionLink("დეტალები", "Details", new { id = item.ID }, new { @class="btn btn-default"}) 
+                @Html.ActionLink("წაშლა", "Delete", new { id = item.ID }, new { @class="btn btn-danger"})
+            </td>
+        </tr>
+    }
+
+</table>

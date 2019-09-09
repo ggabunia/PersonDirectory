@@ -1,0 +1,62 @@
+﻿@model List<PersonDirectory.DataAccess.Person>
+@{
+    ViewBag.Title = "რეპორტი";
+    List<PersonDirectory.DataAccess.ConnectionType> connectionTypes = ViewBag.ConnectionTypes as List<PersonDirectory.DataAccess.ConnectionType>;
+}
+
+<h2>რეპორტი</h2>
+
+@*@Html.ActionLink("გადმოწერა", "DownloadReport", null, new { @class = "btn btn-success" })*@
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    სახელი
+                </th>
+                <th>
+                    გვარი
+                </th>
+                <th>
+                    პირადი ნომერი
+                </th>
+                @foreach (var type in connectionTypes)
+                {
+                    <th>
+                        @type.Type
+                    </th>
+                }
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var person in Model)
+            {
+                <tr>
+                    <td>
+                        @person.ID
+                    </td>
+                    <td>
+                        @person.FirstName
+                    </td>
+                    <td>
+                        @person.LastName
+                    </td>
+                    <td>
+                        @person.PersonalNr
+                    </td>
+                    @foreach (var type in connectionTypes)
+                    {
+                        <td>
+                            @person.PersonConnections.Where(c => c.TypeID == type.ID).ToList().Count
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

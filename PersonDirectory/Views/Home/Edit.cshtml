@@ -1,0 +1,283 @@
+﻿@model PersonDirectory.DataAccess.Person
+
+@{
+    ViewBag.Title = "რედაქტირება";
+    List<PersonDirectory.DataAccess.PhoneType> phoneTypes = ViewBag.PhoneTypes as List<PersonDirectory.DataAccess.PhoneType>;
+    List<PersonDirectory.DataAccess.ConnectionType> connectionTypes = ViewBag.ConnectionTypes as List<PersonDirectory.DataAccess.ConnectionType>;
+    List<PersonDirectory.DataAccess.Person> people = ViewBag.People as List<PersonDirectory.DataAccess.Person>;
+}
+
+<h2>პირის რედაქტირება</h2>
+
+<div class="row">
+
+    <div class="col-lg-5">
+        @using (Html.BeginForm("Edit", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>ძირითადი ინფორმაცია</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.ID)
+                @Html.HiddenFor(model => model.Photo)
+
+
+                <div class="form-group">
+                    @Html.Label("სახელი", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control",  @required="required", @minlength="2", maxlength="50"  } })
+                        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("გვარი", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control",  @required="required", @minlength="2", maxlength="50"  } })
+                        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("სქესი", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("GenderID", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.GenderID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("პირადი ნომერი", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.PersonalNr, new { htmlAttributes = new { @class = "form-control", @required="required", @minlength="11", maxlength="11" } })
+                        @Html.ValidationMessageFor(model => model.PersonalNr, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("დაბადების თარიღი", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.BirthDate, new { htmlAttributes = new { @class = "form-control datepicker", @placeholder = "yyyy-mm-dd", @Value=Model.BirthDate.ToString("yyyy-MM-dd") } })
+                        @Html.ValidationMessageFor(model => model.BirthDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("ქალაქი", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("CityID", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CityID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @if (Model.Photo != null)
+                {
+                    <div class="form-group">
+                        <img src="@Url.Content(Model.Photo)" class="img-responsive" />
+                    </div>
+                }
+                <div class="form-group">
+                    @Html.Label("ფოტოს შეცვლა", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.Editor("image", new { htmlAttributes = new { @class = "form-control", @type = "File" } })
+                        @Html.ValidationMessageFor(model => model.Photo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="რედაქტირება" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+  
+        <div class="col-lg-3">
+            <div class="col-lg-12">
+                <h4>ნომრის დამატება</h4>
+
+                <form class="form" id="addNumberForm">
+                    <div class="alert alert-danger hidden" id="numberError">
+
+                    </div>
+                    <div class="form-group">
+                        <label for="Number">ნომერი</label>
+                        <input type="text" class="form-control" id="Number" name="Number" maxlength="50" minlength="4" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="TypeID">ნომრის ტიპი</label>
+                        <select class="form-control" name="TypeID" id="phoneTypeID">
+                            @foreach (var type in phoneTypes)
+                            {
+                                <option value="@type.ID">@type.Type</option>
+                            }
+                        </select>
+                    </div>
+
+                    <button type="submit" id="" class="btn btn-success">დამატება</button>
+                </form>
+            </div>
+            <div class="col-lg-12">
+                <h4>არსებული ნომრები</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                ნომერი
+                            </th>
+                            <th>
+                                ტიპი
+                            </th>
+                            <th>
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var phone in Model.Phones)
+                        {
+                            <tr>
+                                <td>
+                                    @phone.Number
+                                </td>
+                                <td>
+                                    @phone.PhoneType.Type
+                                </td>
+                                <td>
+                                    <a class="btn btn-danger" href="/Phones/Delete/@phone.ID">წაშლა</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="col-lg-12">
+                <h4>დაკავშირებული პირის დამატება</h4>
+                @if (people.Any())
+                {
+                    <form class="form" id="addConnectionForm">
+                        <div class="alert alert-danger hidden" id="connectionError">
+
+                        </div>
+                        <div class="form-group">
+                            <label for="TargetID">პირი</label>
+                            <select class="form-control" name="TargetID" id="TargetID">
+                                @foreach (var person in people)
+                                {
+                                    <option value="@person.ID">@person.FirstName @person.LastName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="TypeID">კავშირის ტიპი</label>
+                            <select class="form-control" name="TypeID" id="connectionTypeID">
+                                @foreach (var type in connectionTypes)
+                                {
+                                    <option value="@type.ID">@type.Type</option>
+                                }
+                            </select>
+                        </div>
+
+                        <button type="submit" id="" class="btn btn-success">დამატება</button>
+                    </form>
+                }
+                else
+                {
+                    <p class="alert alert-warning">დასამატებელი პიროვნება არ მოიძებნება</p>
+                }
+
+            </div>
+
+            <div class="col-lg-12">
+                <h4> დაკავშირებული პირები</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                სახელი და გვარი
+                            </th>
+                            <th>
+                                კავშირის ტიპი
+                            </th>
+                            <th>
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var connection in Model.PersonConnections)
+                        {
+                            <tr>
+                                <td>
+                                    @connection.Person1.FirstName @connection.Person1.LastName
+                                </td>
+                                <td>
+                                    @connection.ConnectionType.Type
+                                </td>
+                                <td>
+                                    <a class="btn btn-danger" href="/Connections/Delete/@connection.ID">წაშლა</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+    
+
+</div>
+
+
+
+<div>
+    @Html.ActionLink("სიაში დაბრუნება", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+<script>
+
+    $("#addNumberForm").submit(function (event) {
+        event.preventDefault();
+        var personID = "@Model.ID";
+        var number = $("#Number").val();
+        var typeID = $("#phoneTypeID").val()
+
+        $.post("/phones/create", { TypeID: typeID, PersonID: personID, Number: number }, function (data) {
+            if (data == "success") {
+                location.reload();
+             }
+            else {
+                $("#numberError").html(data);
+                $("#numberError").removeClass("hidden");
+            }
+            });
+    });
+
+     $("#addConnectionForm").submit(function (event) {
+        event.preventDefault();
+        var originatorID = "@Model.ID";
+        var targetID = $("#TargetID").val();
+        var typeID = $("#connectionTypeID").val()
+
+         $.post("/Connections/Create", { TypeID: typeID, OriginatorID: originatorID, TargetID: targetID }, function (data) {
+            if (data == "success") {
+                location.reload();
+             }
+            else {
+                $("#connectionError").html(data);
+                $("#connectionError").removeClass("hidden");
+            }
+            });
+    });
+</script>
