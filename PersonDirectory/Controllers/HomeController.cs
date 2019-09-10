@@ -226,6 +226,10 @@ namespace PersonDirectory.Controllers
             }
             ViewBag.CityID = new SelectList(unitOfWork.CityRepository.Get(), "ID", "Name");
             ViewBag.GenderID = new SelectList(unitOfWork.GenderRepository.Get(), "ID", "GenderName");
+            ViewBag.PhoneTypes = unitOfWork.PhoneTypeRepository.Get();
+            ViewBag.ConnectionTypes = unitOfWork.ConnectionTypeRepository.Get();
+            List<int> connectedIDs = person.PersonConnections.Select(c => c.TargetID).ToList();
+            ViewBag.People = unitOfWork.PersonRepository.Get(filter: p => (p.ID != person.ID && !connectedIDs.Contains(p.ID)));
             return View(person);
         }
 
