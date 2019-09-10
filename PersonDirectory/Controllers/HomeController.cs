@@ -292,9 +292,10 @@ namespace PersonDirectory.Controllers
                 }
               
                 csv += person.PersonConnections.Where(c => c.TypeID == connectionTypes.Last().ID).ToList().Count + "\n";
-            }         
-
-            return File(System.Text.Encoding.UTF8.GetBytes(csv), "text/csv", String.Format("report_{0}.csv", DateTime.Now.ToString("yyyy-MM-ddTHH-mm-ss")));
+            }
+            var data = System.Text.Encoding.UTF8.GetBytes(csv);
+            var result = System.Text.Encoding.UTF8.GetPreamble().Concat(data).ToArray();
+            return File (result,"application/csv", String.Format("report_{0}.csv", DateTime.Now.ToString("yyyy-MM-ddTHH-mm-ss")));
         }
 
 
